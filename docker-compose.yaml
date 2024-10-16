@@ -1,13 +1,25 @@
 services:
-    front:
-        build: .
-        working_dir: /app/front/dash
-        ports:
-            - 3000:3000
-        volumes:
-            - .:/app
-        environment:
-            - MARIADB_AUTO_UPGRADE=1
-        entrypoint:
-            - npm
-            - start
+  front:
+    build: .
+    working_dir: /app/front/dash
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app
+    environment:
+      - MARIADB_AUTO_UPGRADE=1
+    entrypoint:
+      - npm
+      - run
+      - dev
+
+  back:
+    image: node:22-alpine
+    working_dir: /app/back
+    ports:
+      - 3001:3001
+    volumes:
+      - .:/app
+    entrypoint:
+      - node
+      - app.js
