@@ -1,0 +1,6 @@
+DROP TABLE cities CASCADE;
+DROP TABLE time_zone CASCADE;
+DROP TABLE time_zones CASCADE;
+DROP TABLE user_city_permissions CASCADE;
+DROP TABLE users CASCADE;
+DROP TABLE businesses CASCADE;

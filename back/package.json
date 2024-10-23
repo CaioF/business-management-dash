@@ -1,5 +1,24 @@
 {
+  "scripts": {
+    "dev": "npx tsx app.ts",
+    "testing": "jest"
+  },
   "dependencies": {
-    "express": "^4.21.1"
+    "body-parser": "^1.20.3",
+    "express": "^4.21.1",
+    "postgres": "^3.4.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.8",
+    "@babel/preset-env": "^7.25.8",
+    "@babel/preset-typescript": "^7.25.7",
+    "@jest/globals": "^29.7.0",
+    "@types/express": "^5.0.0",
+    "@types/jest": "^29.5.13",
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.7",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.1"
   }
 }
