@@ -11,9 +11,20 @@ const users = {
     3: "Jim"
 }
 
-var filter = {page: 1, userId: 1}
+interface Filter {
+  page: number;
+  userId: number;
+  name?: string;
+  reviewGreaterThan?: string | FormDataEntryValue | null;
+  reviewLessThan?: string | FormDataEntryValue | null;
+  contactedFrom?: string | FormDataEntryValue | null;
+  contactedTo?: string | FormDataEntryValue | null;
+  contactedBy?: number;
+}
 
-var fetcher = (url) => fetch(
+const filter: Filter = { page: 1, userId: 1 };
+
+const fetcher = (url: string) => fetch(
     url,
     {
         method: 'POST',
@@ -32,7 +43,7 @@ export default function Page() {
   const {
     data: resp,
     isLoading,
-    isError: error,
+    error,
   } = useSWR(
     "http://localhost:3001/list",
     fetcher,
@@ -50,17 +61,17 @@ export default function Page() {
     return <p>Loading...</p>;
   }
 
-  async function switchUser(event) {
+  async function switchUser(event: React.ChangeEvent<HTMLSelectElement>) {
     const id = event.target.value
     filter.userId = Number(id)
 
     mutate('http://localhost:3001/list')
   }
 
-  async function markAsContacted(event) {
+  async function markAsContacted(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault()
 
-    const businessId = Number(event.target.dataset.businessId)
+    const businessId = Number((event.target as HTMLButtonElement).dataset.businessId)
 
     fetch(
         'http://localhost:3001/mark-as-contacted',
@@ -80,7 +91,7 @@ export default function Page() {
     })
   }
 
-  async function previousPage(event) {
+  async function previousPage(event: React.MouseEvent<HTMLAnchorElement>) {
     event.preventDefault()
 
     if (filter.page > 1) {
@@ -89,7 +100,7 @@ export default function Page() {
     }
   }
 
-  async function nextPage(event) {
+  async function nextPage(event: React.MouseEvent<HTMLAnchorElement>) {
     event.preventDefault()
 
     if (resp.businesses.length > 0) {
@@ -104,7 +115,7 @@ export default function Page() {
     const formData = new FormData(event.currentTarget)
     const name = formData.get("name")
     if (name) {
-        filter.name = name
+        filter.name = name as string
     } else {
         delete filter.name
     }
@@ -196,14 +207,14 @@ return (
               </tr>
             </thead>
             <tbody>
-            {
+            { // implicit any
               resp.businesses.map(business =>
                 <tr key={business.id}>
                   <td className="text-right">{business.name}</td>
                   <td>{business.reviewCount}</td>
                   <td>{business.city.name}, {business.city.state}</td>
                   <td>{business.contactedAt}</td>
-                  <td>{business.contactedBy ? users[business.contactedBy] : ''}</td>
+                  <td>{business.contactedBy ? users[business.contactedBy as keyof typeof users] : ''}</td>
                   <td>{business.contactedAt ? '' : <button type="button" className="btn btn-primary" data-business-id={business.id} onClick={markAsContacted}>Mark as contacted</button>}</td>
                 </tr>
               )
